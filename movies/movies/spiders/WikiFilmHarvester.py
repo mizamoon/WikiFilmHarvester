@@ -2,7 +2,7 @@ import scrapy
 import re
 
 class WikiFilmsSpider(scrapy.Spider):
-    name = "п"
+    name = "WikiFilmHarvester"
     allowed_domains = ["ru.wikipedia.org"]
     start_urls = ["https://ru.wikipedia.org/wiki/Категория:Фильмы_по_алфавиту"]
 
