@@ -28,6 +28,7 @@ class WikiFilmsSpider(scrapy.Spider):
     ref_re = re.compile(r"\[\d+\]")
     lang_re = re.compile(r"^(рус|англ|фр|нем|исп|ит|яп)\.\s*", re.I)
     ext_re = re.compile(r"\s*Внешние\s+видеофайлы.*$", re.I)
+    imdb_tt_re = re.compile(r"(tt\d{7,10})")
 
     def parse(self, r):
         for href in r.css("#mw-pages .mw-category-group li a::attr(href)").getall():
@@ -77,4 +78,21 @@ class WikiFilmsSpider(scrapy.Spider):
                 m = self.year_re.search(val or "")
                 year = m.group(1) if m else ""
 
-        yield {"Название": title, "Жанр": genre, "Режиссер": director, "Страна": country, "Год": year}
+        imdb_href = r.xpath(
+            '//table[contains(@class,"infobox")]//tr['
+            'th//a[contains(@href,"Internet_Movie_Database") or normalize-space()="IMDb"]'
+            ']//td//a[contains(@href,"imdb.com/title")]/@href').get()
+
+        imdb_id = ""
+        if imdb_href:
+            m = self.imdb_tt_re.search(imdb_href)
+            imdb_id = m.group(1) if m else ""
+
+        yield {
+            "Название": title,
+            "Жанр": genre,
+            "Режиссер": director,
+            "Страна": country,
+            "Год": year,
+            "IMDb ID": imdb_id,
+        }

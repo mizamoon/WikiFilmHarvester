@@ -15,24 +15,17 @@
 uv sync
 ```
 
-## Запуск
+## Запуск (одной командой)
 
-Базовый запуск паука с сохранением результата:
-
-```bash
-uv run scrapy crawl wiki_films -o result.csv
-```
-
-### Ограничение количества фильмов
-
-Для тестирования можно ограничить количество собранных фильмов с помощью параметра
-`CLOSESPIDER_ITEMCOUNT`.
-
-Пример — собрать **~200 фильмов**:
+1. Получи ключ OMDb: [https://www.omdbapi.com/apikey.aspx](https://www.omdbapi.com/apikey.aspx)
+2. Задай ключ и запусти:
 
 ```bash
-uv run scrapy crawl wiki_films -s CLOSESPIDER_ITEMCOUNT=200
+export OMDB_API_KEY="your_api_key"
+make run
 ```
+
+> Если нужно изменить количество фильмов для теста — открой `Makefile` и поменяй значение `CLOSESPIDER_ITEMCOUNT`.
 
 ## Пример работы
 
